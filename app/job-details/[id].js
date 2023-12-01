@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   RefreshControl
 } from 'react-native'
-import { Stack, useGlobalSearchParams, useRouter, useSearchParams, useSegments } from 'expo-router'
+import { Stack, useGlobalSearchParams, useRouter, useSegments } from 'expo-router'
 import { useCallback, useState } from "react";
 
 import { Company, JobAbout, JobFooter, JobTabs, ScreenHeaderBtn, Specifics } from '../../components'
@@ -28,7 +28,11 @@ const JobDetails = () => {
   const [refreshing, setRefreshing] = useState(false)
   const [activeTab, setActiveTab] = useState(tabs[0])
 
-  const onRefresh = () => {}
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    refetch()
+    setRefreshing(false)
+  }, [])
 
   const displayTabContent = () => {
     switch (activeTab) {
@@ -92,7 +96,7 @@ const JobDetails = () => {
               <Text>No data</Text>
             ) : (
               <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
-                <Company 
+                <Company
                   companyLogo={data[0].employer_logo}
                   jobTitle={data[0].job_title}
                   companyName={data[0].employer_name}
